@@ -45,7 +45,7 @@ public class botiger{
         }
 
         public void kill() {
-            _entity.damage(99999);
+            _entity.damage(99999); //Change this
         }
 
         public void pathFindOre() {

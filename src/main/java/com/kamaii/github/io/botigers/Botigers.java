@@ -1,22 +1,30 @@
 package com.kamaii.github.io.botigers;
-
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
+
 public final class Botigers extends JavaPlugin  implements Listener {
-    public sqlHandler sqlMan;
+    public yamlHandler yamlMan;
     public configHandler cfg;
     @Override
     public void onEnable() {
+        getLogger().info("Starting up listener...");
+        getServer().getPluginManager().registerEvents(this, this);
         // Plugin startup logic
         getLogger().info("Starting Botiger...");
+        // Load config
         getLogger().info("Loading config from botigers.yml...");
-        cfg = new configHandler();
-        getLogger().info("Starting up sqlite handler.");
-        sqlMan = new sqlHandler(cfg.getSQLDatabase());
-
+        //Load yaml database handler.
+        getLogger().info("Starting up yaml handler.");
+        try {
+            yamlMan = new yamlHandler();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -27,18 +35,18 @@ public final class Botigers extends JavaPlugin  implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJoin(){
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        String playerName = event.getPlayer().getDisplayName() +
+                "(" + event.getPlayer().getUniqueId() + ")";
         getLogger().info("Attempting to load " + playerName + "'s botiger(s)...");
-        /*We want to do an a* here on a new thread. The search task should be
-          be able to be stopped at any time. It should also init with a random
-          cooldown before even beggining, as to avoid malicious lagging of the
-          server. In the event a player leaves before the cooldown period, we want
-          to cancel the search.
-         */
-       // sqlMan.search(Player); <--returns List<botiger> datatype see sqlHandler.
 
-     //   if(searchAbort){
-     //       getLogger().info( playerName + " left too fast! aborting...");
-     //   }
+    }
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event){
+        String playerName = event.getPlayer().getDisplayName() +
+                "(" + event.getPlayer().getUniqueId() + ")";
+
+        getLogger().info("Attempting to unload " + playerName + "'s botiger(s)...");
+
     }
 }

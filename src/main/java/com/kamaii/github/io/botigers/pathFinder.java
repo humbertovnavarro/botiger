@@ -13,7 +13,7 @@ public class pathFinder {
     private int stepHigh; //How often we should refresh the villagers movement in high quality mode.
     private int stepLow; //How often we should refresh the villagers movement in low quality mode.
     private int resolution; //Place a step point every x meters.
-    private Vector3[] pathPoints;
+    //private Vector3[] pathPoints;
     public pathFinder(){
 
     }
