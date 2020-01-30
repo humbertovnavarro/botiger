@@ -1,12 +1,10 @@
 package com.kamaii.github.io.botigers;
 
-import com.sun.media.jfxmedia.logging.Logger;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.Threading;
 public final class Botigers extends JavaPlugin  implements Listener {
     public sqlHandler sqlMan;
     public configHandler cfg;
@@ -39,8 +37,8 @@ public final class Botigers extends JavaPlugin  implements Listener {
          */
        // sqlMan.search(Player); <--returns List<botiger> datatype see sqlHandler.
 
-        if(searchAbort){
-            getLogger().info( playerName + " left too fast! aborting...");
-        }
+     //   if(searchAbort){
+     //       getLogger().info( playerName + " left too fast! aborting...");
+     //   }
     }
 }
