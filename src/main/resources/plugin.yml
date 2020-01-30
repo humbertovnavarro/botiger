@@ -1,0 +1,4 @@
+name: Botigers
+version: ${project.version}
+main: com.kamaii.github.io.botigers.Botigers
+api-version: 1.13
