@@ -1,4 +1,8 @@
 package com.kamaii.github.io.botigers;
+import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -19,12 +23,10 @@ public final class Botigers extends JavaPlugin  implements Listener {
         // Load config
         getLogger().info("Loading config from botigers.yml...");
         //Load yaml database handler.
+        cfg = new configHandler(this);
         getLogger().info("Starting up yaml handler.");
-        try {
-            yamlMan = new yamlHandler();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        yamlMan = new yamlHandler(this);
+
     }
 
     @Override
@@ -32,6 +34,11 @@ public final class Botigers extends JavaPlugin  implements Listener {
         // Plugin shutdown logic
         getLogger().info("Stopping Botiger...");
         getLogger().info("Saving botigers to disk..");
+        try{
+        this.getConfig().save("./plugins/botigers/botigers.yml");}
+        catch(IOException ex){
+            getLogger().info(ex.getStackTrace().toString());
+        }
     }
 
     @EventHandler
@@ -39,14 +46,19 @@ public final class Botigers extends JavaPlugin  implements Listener {
         String playerName = event.getPlayer().getDisplayName() +
                 "(" + event.getPlayer().getUniqueId() + ")";
         getLogger().info("Attempting to load " + playerName + "'s botiger(s)...");
-
+        Location l = event.getPlayer().getLocation();
+        botiger debugBotiger = new botiger("Jerry", event.getPlayer(),(Villager)event.getPlayer().getWorld().spawnEntity(l,EntityType.VILLAGER), Villager.Profession.ARMORER);
     }
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent event){
+    public void onPlayerQuit(PlayerQuitEvent event) {
         String playerName = event.getPlayer().getDisplayName() +
                 "(" + event.getPlayer().getUniqueId() + ")";
 
         getLogger().info("Attempting to unload " + playerName + "'s botiger(s)...");
-
+        try{
+            this.getConfig().save("./plugins/botigers/botigers.yml");}
+        catch (IOException ex){
+            this.getLogger().info(ex.getStackTrace().toString());
+        }
     }
 }
