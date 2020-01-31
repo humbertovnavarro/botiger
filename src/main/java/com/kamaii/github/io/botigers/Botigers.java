@@ -1,11 +1,10 @@
 package com.kamaii.github.io.botigers;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.IOException;
 
 public final class Botigers extends JavaPlugin  implements Listener {
     public yamlHandler yamlMan;
@@ -18,13 +17,10 @@ public final class Botigers extends JavaPlugin  implements Listener {
         getLogger().info("Starting Botiger...");
         // Load config
         getLogger().info("Loading config from botigers.yml...");
+        cfg = new configHandler(this);
         //Load yaml database handler.
         getLogger().info("Starting up yaml handler.");
-        try {
-            yamlMan = new yamlHandler();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        yamlMan = new yamlHandler(this);
     }
 
     @Override

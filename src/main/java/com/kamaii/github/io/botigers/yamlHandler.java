@@ -1,27 +1,22 @@
 package com.kamaii.github.io.botigers;
-import com.sun.source.util.Plugin;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import com.kamaii.github.io.botigers.botiger;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.security.auth.login.Configuration;
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
-public class yamlHandler extends JavaPlugin {
+public class yamlHandler {
     public FileConfiguration db;
-    public yamlHandler() throws IOException {
-        db = this.getConfig();
+    public yamlHandler(Botigers main){
+        db = main.getConfig();
         db.set("player", 1);
         db.set("player.villagers.villager1", 1);
         db.set("player.villagers.villager2", 1);
         try {
             db.save("//config//botigers.yml");
         } catch (IOException ex) {
-            getLogger().info("Error: the botigers.yml could not be saved. Does it exist? Maybe you don't have write access?");
+            main.getLogger().info("Error: the botigers.yml could not be saved. Does it exist? Maybe you don't have write access?");
         }
 
     }

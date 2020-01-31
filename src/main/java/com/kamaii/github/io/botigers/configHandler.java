@@ -1,12 +1,11 @@
 package com.kamaii.github.io.botigers;
 
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
 
-public class configHandler extends JavaPlugin{
+public class configHandler {
     public FileConfiguration db;
     public int botigerMax;
     public boolean doSleepDeprivation;
@@ -20,14 +19,15 @@ public class configHandler extends JavaPlugin{
     public int maxIntelligence;
     public int minIntelligence;
 
-    public configHandler(){
+    public configHandler(Botigers main){
         //Load config if config exists
         if(new File("//config//botigers.yml").exists()) {
 
         }
         //Otherwise create one with default values.
         else{
-            db = getConfig();
+            main.getLogger().info("No yml detected, creating one.");
+            db = main.getConfig();
             db.set("BotigerMax",3);
             db.set("AdminBotigerMax",0);
             db.set("DoSleepDeprivation",true);
@@ -42,7 +42,7 @@ public class configHandler extends JavaPlugin{
                 db.save("//config//botigers.yml");
             }
             catch(IOException ex){
-                getLogger().info("Error saving botigers.yml. Check write permissions.");
+                main.getLogger().info("Error saving botigers.yml. Check write permissions.");
 
             }
         }

@@ -1,5 +1,6 @@
 package com.kamaii.github.io.botigers;
 
+import org.bukkit.block.Block;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Player;
 public class botiger{
@@ -47,7 +48,8 @@ public class botiger{
         public void kill() {
             _entity.damage(99999); //Change this
         }
-
+        public void seek(){
+        }
         public void pathFindOre() {
 
 
