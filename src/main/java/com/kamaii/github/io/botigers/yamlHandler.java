@@ -1,13 +1,19 @@
 package com.kamaii.github.io.botigers;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-
 import java.io.IOException;
-public class yamlHandler {
-    public FileConfiguration db;
+import com.kamaii.github.io.botigers.botiger;
+import org.bukkit.plugin.java.JavaPlugin;
+import sun.security.krb5.Config;
+import javax.security.auth.login.Configuration;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+//Handles database portion.
+public class yamlHandler{
+    FileConfiguration db;
     public yamlHandler(Botigers main){
         db = main.getConfig();
         db.set("player", 1);

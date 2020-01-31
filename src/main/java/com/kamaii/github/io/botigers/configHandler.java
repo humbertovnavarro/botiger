@@ -4,8 +4,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-
-public class configHandler {
+//Handles startup parameters
+public class configHandler{
     public FileConfiguration db;
     public int botigerMax;
     public boolean doSleepDeprivation;
@@ -21,8 +21,8 @@ public class configHandler {
 
     public configHandler(Botigers main){
         //Load config if config exists
-        if(new File("//config//botigers.yml").exists()) {
-
+        if(new File("./plugins/botigers/botigers.yml").exists()) {
+            db = main.getConfig();
         }
         //Otherwise create one with default values.
         else{
@@ -39,11 +39,12 @@ public class configHandler {
             db.set("BotigerMinSeek",3);
             db.set("DoBotigerInvulnerability",true);
             try{
-                db.save("//config//botigers.yml");
+                db.save("./botigers.yml");
             }
             catch(IOException ex){
                 main.getLogger().info("Error saving botigers.yml. Check write permissions.");
 
+                main.getLogger().info(ex.getStackTrace().toString());
             }
         }
     }
