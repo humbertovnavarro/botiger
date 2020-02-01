@@ -1,10 +1,10 @@
 package com.kamaii.github.io.botigers;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import sun.net.www.protocol.file.FileURLConnection;
 
 import java.io.File;
 import java.io.IOException;
-//Handles startup parameters
 public class configHandler{
     public FileConfiguration db;
     public int botigerMax;
@@ -14,15 +14,30 @@ public class configHandler{
     public int botigerMaxSeek;
     public int botigerMinSeek;
     //Villager stat defaults
-    public int maxSpeed;
-    public int minSpeed;
-    public int maxIntelligence;
-    public int minIntelligence;
+    public int botigerSpeedMin;
+    public int botigerMinIntelligence;
+    public int botigerMaxIntelligence;
+    public int adminBotigerMax;
+    public boolean debugMode;
+    public boolean doBotigerInvulnerability = true;
 
+    /*
+        Handles configuration on startup, including methods to change configuration at runtime.
+     */
     public configHandler(Botigers main){
         //Load config if config exists
-        if(new File("./plugins/botigers/botigers.yml").exists()) {
+        if(main.FileConfigurationPath.exists()) {
             db = main.getConfig();
+            //Load the values from the database, if they're not null, otherwise set them to their defaults
+            debugMode = db.get("debug") != null ? (boolean)db.get("debug") : false;
+            botigerMax = db.get("BotigerMax") != null ? (int)db.get("BotigerMax") : 3;
+            adminBotigerMax= db.get("AdminBotigerMax") != null ? (int)db.get("AdminBotigerMax") : 2147483647;
+            doSleepDeprivation = db.get("doSleepDeprivation") != null ? (boolean)db.get("DoSleepDeprivation") : true;
+            botigerSpeedMin = db.get("BotigerMinIntelligence") != null ? (int)db.get("BotigerSpeedMax") : 10;
+            botigerSpeedMax = db.get("BotigerMaxIntelligence") != null ? (int)db.get("BotigerSpeedMax") : 100;
+            botigerMaxSeek = db.get("BotigerMaxSeek") != null ? (int)db.get("BotigerSpeedMax") : 8;
+            botigerMinSeek = db.get("BotigerMinSeek") != null ? (int)db.get("BotigerSpeedMax") : 3;
+            doBotigerInvulnerability = db.get("DoBotigerInvulnerability") != null ? (boolean)db.get("DoBotigerInvulnerability") : true;
         }
         //Otherwise create one with default values.
         else{
@@ -38,14 +53,17 @@ public class configHandler{
             db.set("BotigerMaxSeek",8);
             db.set("BotigerMinSeek",3);
             db.set("DoBotigerInvulnerability",true);
-            try{
-                db.save("./botigers.yml");
-            }
-            catch(IOException ex){
-                main.getLogger().info("Error saving botigers.yml. Check write permissions.");
-
-                main.getLogger().info(ex.getStackTrace().toString());
-            }
+            //Then we'll set the values here instead of loading them.
+            botigerMax = 3;
+            adminBotigerMax = 2147483647;
+            doSleepDeprivation = true;
+            botigerSpeedMax = 0;
+            botigerSpeedMin = 10;
+            botigerMinIntelligence = 10;
+            botigerMaxIntelligence = 10;
+            botigerMaxSeek = 8;
+            botigerMinSeek= 3;
+            doBotigerInvulnerability = true;
         }
     }
 }

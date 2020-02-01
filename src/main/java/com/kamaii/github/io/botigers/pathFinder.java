@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Villager;
 
-public class pathFinder {
+public class pathFinder extends Thread {
     //How far to look for blocks.
     Block target;
     private int seekRange;
