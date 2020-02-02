@@ -58,18 +58,13 @@ public class yamlHandler extends Thread{
         String uuid = player.getUniqueId().toString();
         String activeBotiger = uuid + ".botigers." + idNum + ".active";
         String existsBotiger = uuid + ".botigers." + idNum + ".exists";
-        String botigerName   = uuid + ".botigers." + idNum + ".name";
-        String botigerProfession = uuid + ".botigers." + idNum + ".profession";
             if (db.get(existsBotiger) != null && (boolean) db.get(existsBotiger)) {
                 player.sendMessage(("This botiger does not exist."));
             } else if (db.get(activeBotiger) != null && (boolean) db.get(activeBotiger)) {
                 player.sendMessage(("This botiger is already deployed."));
             } else {
-                db.set(activeBotiger, true);
-                run.activeBotigers.add(new botiger("Alfred",
-                        player,
-                        (Villager) player.getWorld().spawnEntity(player.getLocation(), EntityType.VILLAGER),
-                        Villager.Profession.ARMORER, idNum));
+                run.activeBotigers.add(new botiger(player,idNum,db));
+                db.set(activeBotiger,true);
             }
     }
     public void destroyBotiger(Player player, int idNum){

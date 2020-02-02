@@ -33,8 +33,15 @@ public final class Botigers extends JavaPlugin  implements Listener {
         // Load config
         getLogger().info("Loading config from botigers.yml...");
         cfg = new configHandler(this);
-        getLogger().info("Starting up yaml handler.");
-        yamlMan = new yamlHandler(this);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable(){
+            public void run(){
+                for(int i = 0; i < activeBotigers.size(); i++){
+                    if(activeBotigers.get(i).pathFinding){
+                        activeBotigers.get(i).pather.next();
+                    }
+                }
+            }
+        }, 20, 20);
     }
     @Override
     public void onDisable() {
@@ -48,20 +55,13 @@ public final class Botigers extends JavaPlugin  implements Listener {
         String playerName = event.getPlayer().getDisplayName() +
                 "(" + event.getPlayer().getUniqueId() + ")";
         getLogger().info("Attempting to load " + playerName + "'s botiger(s)...");
-
-        //Debug
-        yamlMan.addBotiger(event.getPlayer(),new botiger());
-        yamlMan.deployBotiger(event.getPlayer(),1);
         saveConfig();
     }
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         String playerName = event.getPlayer().getDisplayName() +
                 "(" + event.getPlayer().getUniqueId() + ")";
-
         getLogger().info("Attempting to unload " + playerName + "'s botiger(s)...");
-        //yamlMan.destroyBotiger(event.getPlayer());
-        yamlMan.destroyBotiger(event.getPlayer(),1);
         saveConfig();
     }
 
