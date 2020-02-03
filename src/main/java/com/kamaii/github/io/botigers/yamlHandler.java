@@ -1,19 +1,8 @@
 package com.kamaii.github.io.botigers;
-import org.apache.commons.lang.ObjectUtils;
+
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
-import java.io.IOException;
-import com.kamaii.github.io.botigers.botiger;
-import org.bukkit.plugin.java.JavaPlugin;
-import sun.security.krb5.Config;
-import javax.security.auth.login.Configuration;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import com.kamaii.github.io.botigers.botiger;
-import org.bukkit.World;
 /*
     Methods for handling database of botigers.
  */
@@ -54,7 +43,7 @@ public class yamlHandler extends Thread{
                 player.sendMessage("You have too many botigers!");
             }
     }
-    public void deployBotiger(Player player, int idNum){
+    public void deployBotiger(Player player, int idNum, Villager ent){
         String uuid = player.getUniqueId().toString();
         String activeBotiger = uuid + ".botigers." + idNum + ".active";
         String existsBotiger = uuid + ".botigers." + idNum + ".exists";
@@ -63,7 +52,7 @@ public class yamlHandler extends Thread{
             } else if (db.get(activeBotiger) != null && (boolean) db.get(activeBotiger)) {
                 player.sendMessage(("This botiger is already deployed."));
             } else {
-                run.activeBotigers.add(new botiger(player,idNum,db));
+                run.activeBotigers.add(new botiger(idNum, this.db,ent.getWorld(),ent));
                 db.set(activeBotiger,true);
             }
     }
@@ -82,13 +71,12 @@ public class yamlHandler extends Thread{
                 int count = run.activeBotigers.size();
                 for (int i = 0; i < count; i++) {
                     if (run.activeBotigers.get(i).id == idNum) {
-                        run.activeBotigers.get(i).kill();
                         run.activeBotigers.remove(i);
                     }
                 }
             }
     }
-    private int getBotigerCount(Player player){
+    public int getBotigerCount(Player player){
         int botigerCount = 0;
         for(int i = 0; i < cfg.botigerMax; i++){
                 if ( db.get(player.getUniqueId() + ".botigers." + i + ".exists") != null && (boolean) db.get(player.getUniqueId() + ".botigers." + i + ".exists")) {

@@ -3,12 +3,9 @@ package com.kamaii.github.io.botigers;
     Calculates paths based on block data and other information
 
  */
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.util.Vector;
 
@@ -29,7 +26,7 @@ public class pathFinder extends Thread {
     }
     public Vector getNextVelocity(Location target){
         if(!idle)
-        return new Vector(0,0,0);
+        return new Vector(,0,0);
         else
             return new Vector(0,0,0);
     }
