@@ -20,7 +20,6 @@ public class configHandler{
     public int adminBotigerMax;
     public boolean debugMode;
     public boolean doBotigerInvulnerability = true;
-
     /*
         Handles configuration on startup, including methods to change configuration at runtime.
      */

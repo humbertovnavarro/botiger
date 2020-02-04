@@ -10,79 +10,79 @@ public class yamlHandler extends Thread{
     private FileConfiguration db;
     private configHandler cfg;
     private Botigers run;
-    public yamlHandler(Botigers main){
+    public yamlHandler(Botigers main, configHandler c){
         run = main;
         db = run.getConfig();
-        cfg = run.cfg;
+        cfg = c;
     }
-    public void delBotiger(Player player, int id){
-            int botigerCount = getBotigerCount(player);
-            player.sendMessage(botigerCount + "/" + cfg.botigerMax + " botigers deployed.");
-            if (botigerCount < cfg.botigerMax) {
-                db.set(player.getUniqueId().toString() + ".botigers." + id +  ".exists", true);
-            } else {
-                player.sendMessage("You have too many botigers!");
-            }
+    public String getPlayerUUID(String customName){
+        String uuid = (String)db.get("botigers" + customName + ".player");
+        return uuid;
     }
-    public void addBotiger ( Player player, botiger pBotiger){
-            int botigerCount = getBotigerCount(player);
-            if (botigerCount + 1 <= cfg.botigerMax) {
-                String botigerEntry = player.getUniqueId().toString() + ".botigers." + botigerCount + ".";
-                db.set(botigerEntry + "exists", true);
-                db.set(botigerEntry + "active", false);
-                db.set(botigerEntry + "profession",pBotiger.profession);
-                db.set(botigerEntry + "bedtime",pBotiger.bedTime);
-                db.set(botigerEntry + "alarm",pBotiger.alarm);
-                db.set(botigerEntry + "affinity",pBotiger.affinity);
-                db.set(botigerEntry + "intelligence",pBotiger.intelligence);
-                db.set(botigerEntry + "speed",pBotiger.speed);
-                db.set(botigerEntry + "strength",pBotiger.awakeTime);
-                db.set(botigerEntry + "luck",pBotiger.luck);
-                db.set(botigerEntry + "isAsleep",pBotiger.isAsleep);
-            } else {
-                player.sendMessage("You have too many botigers!");
-            }
+    public boolean checkEntityID(String id){
+        if(db.get("botigers." + id) != null){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
-    public void deployBotiger(Player player, int idNum, Villager ent){
-        String uuid = player.getUniqueId().toString();
-        String activeBotiger = uuid + ".botigers." + idNum + ".active";
-        String existsBotiger = uuid + ".botigers." + idNum + ".exists";
-            if (db.get(existsBotiger) != null && (boolean) db.get(existsBotiger)) {
-                player.sendMessage(("This botiger does not exist."));
-            } else if (db.get(activeBotiger) != null && (boolean) db.get(activeBotiger)) {
-                player.sendMessage(("This botiger is already deployed."));
-            } else {
-                run.activeBotigers.add(new botiger(idNum, this.db,ent.getWorld(),ent));
-                db.set(activeBotiger,true);
-            }
+    public int getIntelligence(botiger get){
+        String entry = get.name + ".";
+        if(db.get(entry + "intelligence") != null){
+            return (int) db.get(entry + "intelligence");
+        }else{
+            run.getLogger().info("Error in botigers.yml. Could not fetch "  + entry + "intelligence");
+            return 1;
+        }
     }
-    public void destroyBotiger(Player player, int idNum){
-        String uuid = player.getUniqueId().toString();
-        String activeBotiger = uuid + ".botigers." + idNum + ".active";
-        String existsBotiger = uuid + ".botigers." + idNum + ".exists";
-        String botigerName   = uuid + ".botigers." + idNum + ".name";
-        String botigerProfession = uuid + ".botigers." + idNum + ".profession";
-            if (db.get(existsBotiger) != null && (boolean) db.get(existsBotiger)) {
-                player.sendMessage(("This botiger doesn't exist."));
-            } else if (!(boolean) db.get(activeBotiger)) {
-                player.sendMessage(("This botiger is not out."));
-            } else {
-                db.set(activeBotiger, false);
-                int count = run.activeBotigers.size();
-                for (int i = 0; i < count; i++) {
-                    if (run.activeBotigers.get(i).id == idNum) {
-                        run.activeBotigers.remove(i);
-                    }
-                }
-            }
+    public int getBedtime(botiger get){
+        String entry = get.name + ".";
+        if(db.get(entry + "bedtime") != null){
+            return (int) db.get(entry + "bedtime");
+        }else{
+            run.getLogger().info("Error in botigers.yml. Could not fetch "  + entry + "bedtime");
+            return 1;
+        }
+    }
+    public int getAlarm(botiger get){
+        String entry = get.name + ".";
+        if(db.get(entry + "bedtime") != null){
+            return (int) db.get(entry + "alarm");
+        }else{
+            run.getLogger().info("Error in botigers.yml. Could not fetch "  + entry + "alarm");
+            return 1;
+        }
+    }
+    public void setIntelligence(botiger set){
+        db.set("botigers." + set.name + ".intelligence",set.intelligence);
+    }
+    public void setBedtime(botiger set){
+        db.set("botigers." + set.name + ".bedtime",set.bedTime);
+    }
+    public void setAlarm(botiger set){
+        db.set("botigers." + set.name + ".alarm",set.alarm);
     }
     public int getBotigerCount(Player player){
         int botigerCount = 0;
         for(int i = 0; i < cfg.botigerMax; i++){
-                if ( db.get(player.getUniqueId() + ".botigers." + i + ".exists") != null && (boolean) db.get(player.getUniqueId() + ".botigers." + i + ".exists")) {
+                if ( db.get(player.getUniqueId() + ".botigers." + i + ".active") != null && (boolean) db.get(player.getUniqueId() + ".botigers." + i + ".exists")) {
                     botigerCount++;
                 }
         }
         return botigerCount;
+    }
+    public void setActive(botiger set){
+        db.set("botigers." + set.name + "." + set.id + ".active",true);
+    }
+    public void setPlayer(String name, String player){
+        db.set("botigers." + name + "." + ".player",player);
+    }
+    public botiger saveBotiger(Player eventPlayer,botiger add) {
+        setActive(add);
+        setAlarm(add);
+        setBedtime(add);
+        setIntelligence(add);
+        return add;
     }
 }

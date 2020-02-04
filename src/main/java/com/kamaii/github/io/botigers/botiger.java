@@ -19,7 +19,6 @@ public class botiger{
                 "Karen", "Rogers", "Nguyen" , "Lee", "Thorn", "Flash", "Gordan", "Thom","Yorke","Queen","Jonathan","Joestar",
                 "Star","Platinum","Advy","Wilson","Claymore","Rainbow", "Taco","Joe"
         };
-        public static final String hiddenTag = "     ";
         public int id;
         public String name;
         public Player owner;
@@ -34,11 +33,9 @@ public class botiger{
         public float awakeTime;
         public boolean isAsleep;
         public boolean pathFinding = false;
-        public pathFinder pather;
-        public yamlHandler db;
-
-        //For new botigers
-        public botiger(Player player, Villager target, int _id) {
+        public static final String hiddenTag = "§8§1§9§2";
+        //Constructer for new botigers at runtime
+        public botiger(Player player, Villager target) {
                 owner = player;
                 name = generateName();
                 isAsleep = target.isSleeping();
@@ -51,51 +48,28 @@ public class botiger{
                 bedTime = 17;
                 alarm = 0;
                 pathFinding = false;
-                target.setCustomName(name + " " + player.getUniqueId().toString() + " " + id);
-                target.setHealth(69);
+                target.setCustomName(name);
+                target.setHealth(19);
                 target.setInvulnerable(true);
-                id = _id;
         }
-        public botiger(int id, FileConfiguration db, World world, Villager ent,Player player){
-                if(ent.getHealth() == 69){
-                        if(ent.getCustomName().contains(player.getUniqueId().toString())){
-                                String stats = player.getUniqueId() + "." + id + ".";
-                                luck = (int)db.get(stats + "luck");
-                                intelligence = (int)db.get(stats + "intelligence");
-                                db.set(stats + "alive",true);
-                        }
-                }
+        public botiger(){
         }
         private void rollStats(botiger bot){
 
         }
         public void seek(){
         }
-        public void pathFindOre() {
-
-
-        }
-        public void pathFindMobs() {
-
-        }
-        public void pathFindFish() {
-
-        }
-
-        public void pathFindNextPatrolStop() {
-
-        }
-
         public void goSleep() {
 
         }
         public String generateName(){
-                String newName = "";
-                Random r = new Random();
-                int rand = r.nextInt() * (names.length + 1);
-                newName += names[rand];
-                rand = r.nextInt() * (names.length + 1);
-                newName += " " + names[rand];
-                return newName;
+                Random rand = new Random();
+                String name = "";
+                int r = 0;
+                r = rand.nextInt(names.length);
+                name += names[r] + " ";
+                name += names[r] + " ";
+                name += names[r];
+                return name;
         }
 }
