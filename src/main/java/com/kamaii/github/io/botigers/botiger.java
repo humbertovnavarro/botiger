@@ -1,6 +1,6 @@
 package com.kamaii.github.io.botigers;
 
-import org.bukkit.World;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -33,9 +33,8 @@ public class botiger{
         public float awakeTime;
         public boolean isAsleep;
         public boolean pathFinding = false;
-        public static final String hiddenTag = "§8§1§9§2";
-        //Constructer for new botigers at runtime
-        public botiger(Player player, Villager target) {
+        //Write
+        public botiger(Player player, Villager target, FileConfiguration db) {
                 owner = player;
                 name = generateName();
                 isAsleep = target.isSleeping();
@@ -48,11 +47,44 @@ public class botiger{
                 bedTime = 17;
                 alarm = 0;
                 pathFinding = false;
+                target.setAI(false);
                 target.setCustomName(name);
                 target.setHealth(19);
                 target.setInvulnerable(true);
+                db.set(this.name,true);
+                db.set(this.name + ".affinity",affinity);
+                db.set(this.name + ".intelligence",intelligence);
+                db.set(this.name + ".awakeTime",awakeTime);
+                db.set(this.name + ".seekRange",seekRange);
+                db.set(this.name + ".affinity",affinity);
+                db.set(this.name + ".alarm", alarm);
+                db.set(this.name + ".awakeTime",awakeTime);
+                db.set(this.name + ".player",player.getUniqueId().toString());
+                db.set(this.name + ".pathfinding",false);
         }
-        public botiger(){
+        //Read
+        public botiger(String _name, Villager target,FileConfiguration db){
+                String vilName = target.getCustomName().toString();
+                if(db.getString(vilName + ".player") != null){
+                       owner = Bukkit.getPlayer((String)db.get(vilName + "player"));
+                }
+                if(db.getString(vilName + ".player") != null ){
+                        owner = Bukkit.getPlayer(db.getString(vilName + "player"));
+                }
+                luck = db.getInt(vilName + ".intelligence");
+                name = _name;
+                isAsleep = target.isSleeping();
+                luck = db.getInt(vilName + ".intelligence");
+                affinity = db.getInt(vilName + ".affinity");
+                awakeTime = db.getInt(vilName + ".awakeTime");
+                seekRange = db.getInt(vilName + ".seekRange");
+                bedTime = db.getInt(vilName + ".bedTime");
+                alarm = db.getInt(vilName  + ".alarm");
+                pathFinding = false;
+                target.setAI(false);
+                target.setCustomName(name);
+                target.setHealth(20);
+                target.setInvulnerable(true);
         }
         private void rollStats(botiger bot){
 
